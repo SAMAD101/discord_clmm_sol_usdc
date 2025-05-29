@@ -1,9 +1,9 @@
 {
-  "name": "tgbot_clmm_sol_usdc",
+  "name": "discord_clmm_sol_usdc",
   "version": "1.0.0",
-  "description": "Telegram Bot Liquidity Management Bot for the SOL-USDC Pool on Raydium",
+  "description": "Discord Bot Liquidity Management Bot for the SOL-USDC Pool on Raydium",
   "main": "index.ts",
-  "repository": "https://github.com/SAMAD101/tgbot_clmm_sol_usdc",
+  "repository": "https://github.com/SAMAD101/discord_clmm_sol_usdc.git",
   "author": "Sam <asamadans@gmail.com>",
   "scripts": {
     "build": "tsc",
@@ -24,8 +24,10 @@
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@types/axios": "^0.14.4",
+    "@types/bn.js": "^5.1.6",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.9",
+    "bn.js": "^5.2.2",
     "drizzle-kit": "^0.31.1",
     "eslint": "^9.27.0",
     "globals": "^16.1.0",
@@ -38,12 +40,17 @@
   },
   "dependencies": {
     "@libsql/client": "^0.15.7",
+    "@raydium-io/raydium-sdk-v2": "^0.1.138-alpha",
     "@solana/web3.js": "^1.98.0",
     "axios": "^1.8.2",
+    "bs58": "^6.0.0",
+    "bullmq": "^5.53.0",
     "cron": "^4.1.0",
+    "decimal.js": "^10.5.0",
+    "discord.js": "^14.19.3",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
-    "grammy": "^1.35.0",
+    "ioredis": "^5.6.1",
     "zod": "^3.24.2"
   }
 }

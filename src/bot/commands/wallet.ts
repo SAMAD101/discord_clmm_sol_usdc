@@ -1,11 +1,14 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command } from "./types";
 
-export const start: Command = {
+export const wallet: Command = {
   data: new SlashCommandBuilder()
-    .setName("start")
-    .setDescription("Start the bot"),
+    .setName("wallet")
+    .setDescription("Get the wallet address"),
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.reply({ content: "Starting the bot", ephemeral: true });
+    await interaction.reply({
+      content: "Getting the wallet address",
+      ephemeral: true,
+    });
   },
 };
