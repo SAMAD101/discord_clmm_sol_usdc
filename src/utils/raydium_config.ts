@@ -8,10 +8,11 @@ import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 import bs58 from "bs58";
 
 export const owner: Keypair = Keypair.fromSecretKey(
-  bs58.decode("<YOUR_WALLET_SECRET_KEY>"),
+  bs58.decode(process.env.WALLET_SECRET_KEY!),
 );
-export const connection = new Connection("<YOUR_RPC_URL>"); //<YOUR_RPC_URL>
-// export const connection = new Connection(clusterApiUrl('devnet')) //<YOUR_RPC_URL>
+
+export const connection = new Connection(clusterApiUrl("mainnet-beta"));
+
 export const txVersion = TxVersion.V0; // or TxVersion.LEGACY
 const cluster = "mainnet"; // 'mainnet' | 'devnet'
 
