@@ -1,13 +1,1 @@
-{
-  "version": "7",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "6",
-      "when": 1747918779074,
-      "tag": "0000_young_retro_girl",
-      "breakpoints": true
-    }
-  ]
-}
+{"version":"7","dialect":"postgresql","entries":[]}
