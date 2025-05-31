@@ -1,5 +1,5 @@
 {
-  "id": "0c67c1e0-bf2c-4038-a99e-d7fb6c93024f",
+  "id": "91bdd2d2-c64d-450e-a2c7-19004eadf31e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,13 +10,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
         "wallet_id": {
           "name": "wallet_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -25,6 +25,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
         },
         "created_at": {
           "name": "created_at",
@@ -40,21 +47,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "positions_table_wallet_id_wallets_table_id_fk": {
-          "name": "positions_table_wallet_id_wallets_table_id_fk",
-          "tableFrom": "positions_table",
-          "tableTo": "wallets_table",
-          "columnsFrom": [
-            "wallet_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -67,7 +60,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
