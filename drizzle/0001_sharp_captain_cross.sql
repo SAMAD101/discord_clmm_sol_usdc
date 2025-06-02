@@ -1,0 +1,1 @@
+ALTER TABLE "positions_table" ADD COLUMN "amount" integer NOT NULL;

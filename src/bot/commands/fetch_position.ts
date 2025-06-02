@@ -7,13 +7,26 @@ export const fetchPositionCommand = {
     .setDescription("Fetch the position of the user")
     .addUserOption((option) =>
       option
-        .setName("user")
-        .setDescription("The user to fetch the position of")
+        .setName("positionId")
+        .setDescription("The positionId to fetch the position of")
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction) {
+    const positionId = interaction.options.getString("positionId");
+    if (!positionId) {
+      await interaction.reply({
+        content: "Please provide a positionId",
+        ephemeral: true,
+      });
+      return;
+    }
     await interaction.reply({
       content: "Fetching position...",
+      ephemeral: true,
+    });
+    const result = await fetchPositionController(positionId);
+    await interaction.reply({
+      content: `Position fetched: ${result}`,
       ephemeral: true,
     });
   },

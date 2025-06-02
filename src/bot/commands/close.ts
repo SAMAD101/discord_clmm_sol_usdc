@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command } from "./types";
+import { closePositionController } from "../controllers";
 
 export const closePosition: Command = {
   data: new SlashCommandBuilder()
@@ -7,13 +8,22 @@ export const closePosition: Command = {
     .setDescription("Close a position on Raydium")
     .addStringOption((option) =>
       option
-        .setName("pool")
-        .setDescription("The pool to close a position on")
+        .setName("positionId")
+        .setDescription("The positionId to close a position on")
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction) {
+    const positionId = interaction.options.getString("positionId");
+    if (!positionId) {
+      await interaction.reply({
+        content: "Please provide a positionId",
+        ephemeral: true,
+      });
+      return;
+    }
+    const result = await closePositionController(positionId);
     await interaction.reply({
-      content: "Closing a position on Raydium",
+      content: `Position closed: ${result}`,
       ephemeral: true,
     });
   },
