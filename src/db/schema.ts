@@ -11,6 +11,7 @@ export const walletsTable = pgTable("wallets_table", {
 export const positionsTable = pgTable("positions_table", {
   id: text("id").primaryKey(),
   walletId: text("wallet_id").notNull(),
+  amount: integer("amount").notNull(),
   poolId: text("pool_id").notNull(),
   status: text("status").notNull().default("open"),
   createdAt: timestamp("created_at").notNull(),

@@ -1,30 +1,17 @@
-import { Interaction } from "discord.js";
-import { queue } from "../../queue";
+import { open_position, close_position, fetchPositionInfo, listPositions } from "../../utils";
 
-export const openPositionController = async (
-  amount: string,
-) => {
-  await queue.add("openPosition", {
-    amount,
-  });
+export const openPositionController = async (amount: string) => {
+  return await open_position(amount);
 };
 
-export const closePositionController = async (
-  positionId: string,
-) => {
-  await queue.add("closePosition", {
-    positionId,
-  });
+export const closePositionController = async (positionId: string) => {
+  return await close_position(positionId);
 };
 
-export const fetchPositionController = async (
-  positionId: string,
-) => {
-  await queue.add("fetchPosition", {
-    positionId,
-  });
+export const fetchPositionController = async (positionId: string) => {
+  return await fetchPositionInfo(positionId);
 };
 
 export const listPositionsController = async () => {
-  await queue.add("listPositions", {});
+  return await listPositions();
 };

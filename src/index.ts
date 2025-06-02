@@ -1,10 +1,7 @@
 import "dotenv/config";
-import { drizzle } from "drizzle-orm/libsql";
 import client from "./bot";
 import { Events, REST, Routes } from "discord.js";
 import { commands } from "./bot/commands";
-
-const db = drizzle({ connection: { url: process.env.DATABASE_URL! } });
 
 const token = process.env.DISCORD_TOKEN!;
 const clientId = process.env.BOT_CLIENT_ID!;

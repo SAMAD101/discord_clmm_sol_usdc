@@ -5,16 +5,17 @@ import {
   ClmmKeys,
 } from "@raydium-io/raydium-sdk-v2";
 import BN from "bn.js";
-import { initSdk, txVersion } from "./raydium_config";
+import { initSdk, txVersion, ownerPublicKey } from "./raydium_config";
 import Decimal from "decimal.js";
 import { isValidClmm } from "./clmm_config";
+import { poolId, Position } from ".";
+import { db } from "../db";
+import { positionsTable } from "../db/schema";
 
-export const createPosition = async () => {
+export const open_position = async (amount: string): Promise<Position> => {
   const raydium = await initSdk();
 
   let poolInfo: ApiV3PoolInfoConcentratedItem;
-  // SOL-USDC pool
-  const poolId = "3ucNos4NbumPLZNWztqGHNFFgkHeRMBQAVemeeomsUxv";
   let poolKeys: ClmmKeys | undefined;
 
   if (raydium.cluster === "mainnet") {
@@ -34,8 +35,9 @@ export const createPosition = async () => {
   // const rpcData = await raydium.clmm.getRpcClmmPoolInfo({ poolId: poolInfo.id })
   // poolInfo.price = rpcData.currentPrice
 
-  const inputAmount = 0.000001; // RAY amount
-  const [startPrice, endPrice] = [0.000001, 100000];
+  const currentPrice = poolInfo.price;
+  // -5% and +5% price range
+  const [startPrice, endPrice] = [currentPrice * 0.95, currentPrice * 1.05];
 
   const { tick: lowerTick } = TickUtils.getPriceAndTick({
     poolInfo,
@@ -52,12 +54,12 @@ export const createPosition = async () => {
   const epochInfo = await raydium.fetchEpochInfo();
   const res = await PoolUtils.getLiquidityAmountOutFromAmountIn({
     poolInfo,
-    slippage: 0,
+    slippage: 0.05,
     inputA: true,
     tickUpper: Math.max(lowerTick, upperTick),
     tickLower: Math.min(lowerTick, upperTick),
     amount: new BN(
-      new Decimal(inputAmount || "0")
+      new Decimal(amount || "0")
         .mul(10 ** poolInfo.mintA.decimals)
         .toFixed(0),
     ),
@@ -76,7 +78,7 @@ export const createPosition = async () => {
       useSOLBalance: true,
     },
     baseAmount: new BN(
-      new Decimal(inputAmount || "0")
+      new Decimal(amount || "0")
         .mul(10 ** poolInfo.mintA.decimals)
         .toFixed(0),
     ),
@@ -89,14 +91,30 @@ export const createPosition = async () => {
     },
   });
 
+  console.log("extInfo", extInfo);
+
   // don't want to wait confirm, set sendAndConfirm to false or don't pass any params to execute
   const { txId } = await execute({ sendAndConfirm: true });
   console.log("clmm position opened:", {
     txId,
     nft: extInfo.nftMint.toBase58(),
   });
-  process.exit(); // if you don't want to end up node execution, comment this line
-};
 
-/** uncomment code below to execute */
-// createPosition()
+  console.log("txId", txId);
+
+  await db.insert(positionsTable).values([{
+    id: extInfo.nftMint.toBase58(),
+    walletId: ownerPublicKey,
+    amount: Number(amount),
+    poolId: poolInfo.id,
+    status: "open",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }]);
+
+  return {
+    id: extInfo.nftMint.toBase58(),
+    amount: Number(amount),
+    pool: `${poolInfo.mintA.symbol} - ${poolInfo.mintB.symbol}`,
+  };
+};

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { Command } from "./types";
 import { openPositionController } from "../controllers";
 
@@ -9,7 +9,7 @@ export const openPosition: Command = {
     .addStringOption((option) =>
       option
         .setName("amount")
-        .setDescription("The amount of SOL to open a position on")
+        .setDescription("The amount of SOL open a position with")
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction) {
@@ -17,14 +17,17 @@ export const openPosition: Command = {
     if (!amount) {
       await interaction.reply({
         content: "Please provide an amount",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
+
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
     const result = await openPositionController(amount);
-    await interaction.reply({
+
+    await interaction.editReply({
       content: `Position opened: ${result}`,
-      ephemeral: true,
     });
   },
 };

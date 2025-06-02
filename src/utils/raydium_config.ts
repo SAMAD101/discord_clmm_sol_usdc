@@ -5,18 +5,22 @@ import {
 } from "@raydium-io/raydium-sdk-v2";
 import { Connection, Keypair, clusterApiUrl } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
-import bs58 from "bs58";
+
+const secretKey = new Uint8Array(JSON.parse(process.env.WALLET_SECRET_KEY!));
 
 export const owner: Keypair = Keypair.fromSecretKey(
-  bs58.decode(process.env.WALLET_SECRET_KEY!),
+  secretKey,
 );
+
+export const ownerPublicKey = owner.publicKey.toBase58();
 
 export const connection = new Connection(clusterApiUrl("mainnet-beta"));
 
-export const txVersion = TxVersion.V0; // or TxVersion.LEGACY
-const cluster = "mainnet"; // 'mainnet' | 'devnet'
+export const txVersion = TxVersion.V0;
+const cluster = "mainnet";
 
 let raydium: Raydium | undefined;
+
 export const initSdk = async (params?: { loadToken?: boolean }) => {
   if (raydium) return raydium;
   if (connection.rpcEndpoint === clusterApiUrl("mainnet-beta"))
@@ -74,5 +78,3 @@ export const fetchTokenAccountData = async () => {
   return tokenAccountData;
 };
 
-export const grpcUrl = "<YOUR_GRPC_URL>";
-export const grpcToken = "<YOUR_GRPC_TOKEN>";

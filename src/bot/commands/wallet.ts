@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { Command } from "./types";
 
 export const wallet: Command = {
@@ -8,7 +8,7 @@ export const wallet: Command = {
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply({
       content: "Getting the wallet address",
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
   },
 };

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { fetchPositionController } from "../controllers";
 
 export const fetchPositionCommand = {
@@ -7,16 +7,16 @@ export const fetchPositionCommand = {
     .setDescription("Fetch the position of the user")
     .addUserOption((option) =>
       option
-        .setName("positionId")
-        .setDescription("The positionId to fetch the position of")
+        .setName("id")
+        .setDescription("The position ID to fetch the position of")
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction) {
-    const positionId = interaction.options.getString("positionId");
+    const positionId = interaction.options.getString("id");
     if (!positionId) {
       await interaction.reply({
-        content: "Please provide a positionId",
-        ephemeral: true,
+        content: "Please provide a position ID",
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
