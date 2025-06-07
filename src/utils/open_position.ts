@@ -19,8 +19,6 @@ export const open_position = async (amount: string): Promise<Position> => {
   let poolKeys: ClmmKeys | undefined;
 
   if (raydium.cluster === "mainnet") {
-    // note: api doesn't support get devnet pool info, so in devnet else we go rpc method
-    // if you wish to get pool info from rpc, also can modify logic to go rpc method directly
     const data = await raydium.api.fetchPoolById({ ids: poolId });
     poolInfo = data[0] as ApiV3PoolInfoConcentratedItem;
     if (!isValidClmm(poolInfo.programId))
@@ -31,13 +29,9 @@ export const open_position = async (amount: string): Promise<Position> => {
     poolKeys = data.poolKeys;
   }
 
-  /** code below will get on chain realtime price to avoid slippage error, uncomment it if necessary */
-  // const rpcData = await raydium.clmm.getRpcClmmPoolInfo({ poolId: poolInfo.id })
-  // poolInfo.price = rpcData.currentPrice
-
   const currentPrice = poolInfo.price;
-  // -5% and +5% price range
-  const [startPrice, endPrice] = [currentPrice * 0.95, currentPrice * 1.05];
+  // -2.5% and +2.5% : 5% price range
+  const [startPrice, endPrice] = [currentPrice * 0.975, currentPrice * 1.025];
 
   const { tick: lowerTick } = TickUtils.getPriceAndTick({
     poolInfo,
@@ -91,9 +85,6 @@ export const open_position = async (amount: string): Promise<Position> => {
     },
   });
 
-  console.log("extInfo", extInfo);
-
-  // don't want to wait confirm, set sendAndConfirm to false or don't pass any params to execute
   const { txId } = await execute({ sendAndConfirm: true });
   console.log("clmm position opened:", {
     txId,
@@ -105,7 +96,7 @@ export const open_position = async (amount: string): Promise<Position> => {
   await db.insert(positionsTable).values([{
     id: extInfo.nftMint.toBase58(),
     walletId: ownerPublicKey,
-    amount: Number(amount),
+    amount: amount,
     poolId: poolInfo.id,
     status: "open",
     createdAt: new Date(),
