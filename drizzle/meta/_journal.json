@@ -15,6 +15,13 @@
       "when": 1748666764069,
       "tag": "0001_sharp_captain_cross",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749330380290,
+      "tag": "0002_unique_violations",
+      "breakpoints": true
     }
   ]
 }

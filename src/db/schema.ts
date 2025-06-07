@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, decimal, text, timestamp } from "drizzle-orm/pg-core";
 
 export const walletsTable = pgTable("wallets_table", {
   id: text("id").primaryKey(),
@@ -11,7 +11,7 @@ export const walletsTable = pgTable("wallets_table", {
 export const positionsTable = pgTable("positions_table", {
   id: text("id").primaryKey(),
   walletId: text("wallet_id").notNull(),
-  amount: integer("amount").notNull(),
+  amount: decimal("amount").notNull(),
   poolId: text("pool_id").notNull(),
   status: text("status").notNull().default("open"),
   createdAt: timestamp("created_at").notNull(),

@@ -1,0 +1,1 @@
+ALTER TABLE "positions_table" ALTER COLUMN "amount" SET DATA TYPE numeric;
