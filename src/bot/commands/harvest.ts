@@ -2,14 +2,14 @@ import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "
 import { Command } from "./types";
 import { closePositionController, harvestLockedPositionController } from "../controllers";
 
-export const closePosition: Command = {
+export const harvestLockedPosition: Command = {
   data: new SlashCommandBuilder()
-    .setName("close")
-    .setDescription("Close a position on Raydium")
+    .setName("harvest")
+    .setDescription("Harvest a locked position on Raydium")
     .addStringOption((option) =>
       option
         .setName("id")
-        .setDescription("The position ID to close")
+        .setDescription("The position ID to harvest")
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction) {
@@ -24,19 +24,10 @@ export const closePosition: Command = {
 
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    const harvest = interaction.options.getBoolean("harvest");
-    if (harvest) {
-      const harvestResult = await harvestLockedPositionController(positionId);
-      await interaction.editReply({
-        content: `Harvested the position position: ${harvestResult}`,
-      });
-      return;
-    }
-
-    const result = await closePositionController(positionId);
+    const result = await harvestLockedPositionController(positionId);
 
     await interaction.editReply({
-      content: `Position closed: ${result}`,
+      content: `Position harvested: ${result}`,
     });
   },
 };
