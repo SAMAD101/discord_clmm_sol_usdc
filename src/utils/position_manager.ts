@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { is_in_range } from './check_range';
 import { close_position } from './close_position';
 import { open_position } from './open_position';
+import { webhookClient } from '..';
 
 export const startPositionManager = () => {
     // Run every 30 minutes
@@ -22,12 +23,20 @@ export const startPositionManager = () => {
                     
                     if (!inRange) {
                         console.log(`Position ${position.id} is out of range. Rebalancing...`);
+
+                        await webhookClient.send({
+                            content: `Position ${position.id} is out of range. Rebalancing...`,
+                        });
                         
                         await close_position(position.id);
                         
-                        await open_position(position.amount.toString());
+                        let newPosition = await open_position(position.amount.toString());
                         
                         console.log(`Successfully rebalanced position ${position.id}`);
+
+                        await webhookClient.send({
+                            content: `New position opened: ${newPosition.id}`,
+                        });
                     } else {
                         console.log(`Position ${position.id} is in range.`);
                     }

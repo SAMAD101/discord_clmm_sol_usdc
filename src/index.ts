@@ -1,11 +1,12 @@
 import "dotenv/config";
 import client from "./bot";
-import { Events, REST, Routes } from "discord.js";
+import { Events, REST, Routes, WebhookClient } from "discord.js";
 import { commands } from "./bot/commands";
 import { startPositionManager } from "./utils/position_manager";
 
 const token = process.env.DISCORD_TOKEN!;
 const clientId = process.env.BOT_CLIENT_ID!;
+const discordChannelWebhook = process.env.DISCORD_CHANNEL_WEBHOOK!;
 
 if (!token) {
   throw new Error("DISCORD_TOKEN is not set");
@@ -14,6 +15,12 @@ if (!token) {
 if (!clientId) {
   throw new Error("CLIENT_ID is not set");
 }
+
+if (!discordChannelWebhook) {
+  throw new Error("DISCORD_CHANNEL_WEBHOOK is not set");
+}
+
+export const webhookClient = new WebhookClient({ url: discordChannelWebhook });
 
 const rest = new REST().setToken(token);
 
