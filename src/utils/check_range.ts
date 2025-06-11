@@ -21,21 +21,19 @@ export const is_in_range = async (positionId: string): Promise<boolean> => {
         poolKeys = data.poolKeys;
     }
 
-    const currentPrice = poolInfo.price;
-    // -2.5% and +2.5% : 5% price range
-    const [startPrice, endPrice] = [currentPrice * 0.975, currentPrice * 1.025];
+    const currentPrice = new Decimal(poolInfo.price);
 
-    const { tick: lowerTick } = TickUtils.getPriceAndTick({
+    const { price: lowerPrice } = TickUtils.getTickPrice({
         poolInfo,
-        price: new Decimal(startPrice),
+        tick: position.tickLower,
         baseIn: true,
     });
 
-    const { tick: upperTick } = TickUtils.getPriceAndTick({
+    const { price: upperPrice } = TickUtils.getTickPrice({
         poolInfo,
-        price: new Decimal(endPrice),
+        tick: position.tickUpper,
         baseIn: true,
     });
 
-    return position.tickLower >= lowerTick && position.tickUpper <= upperTick
+    return currentPrice.gte(lowerPrice) && currentPrice.lte(upperPrice);
 }
