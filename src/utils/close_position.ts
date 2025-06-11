@@ -5,6 +5,7 @@ import { poolId, Position } from '.'
 import { positionsTable } from '../db/schema'
 import { db } from '../db'
 import { eq } from 'drizzle-orm'
+import { BN } from 'bn.js'
 
 export const close_position = async (positionId: string): Promise<Position> => {
   const raydium = await initSdk()
@@ -27,12 +28,19 @@ export const close_position = async (positionId: string): Promise<Position> => {
   const position = allPosition.find((p) => p.poolId.toBase58() === poolInfo.id)
   if (!position) throw new Error(`user do not have position in pool: ${poolInfo.id}`)
 
-  const { execute } = await raydium.clmm.closePosition({
+  const { execute } = await raydium.clmm.decreaseLiquidity({
     poolInfo,
     poolKeys,
     ownerPosition: position,
+    ownerInfo: {
+      useSOLBalance: true,
+      closePosition: true,
+    },
+    liquidity: position.liquidity,
+    amountMinA: new BN(0),
+    amountMinB: new BN(0),
     txVersion,
-  })
+  }) 
 
   const { txId } = await execute({ sendAndConfirm: true })
   console.log('clmm position closed:', { txId: `https://explorer.solana.com/tx/${txId}` })
@@ -44,7 +52,7 @@ export const close_position = async (positionId: string): Promise<Position> => {
 
   return {
     id: position.nftMint.toBase58(),
-    amount: Number(await db.select().from(positionsTable).where(eq(positionsTable.id, positionId)).then((res) => res[0].amount)),
+    amount: Number(0),
     pool: `${poolInfo.mintA.symbol} - ${poolInfo.mintB.symbol}`,
   };
 }
