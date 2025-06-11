@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { Command } from "./types";
-import { closePositionController, harvestLockedPositionController } from "../controllers";
+import { closePositionController } from "../controllers";
 
 export const closePosition: Command = {
   data: new SlashCommandBuilder()
@@ -23,15 +23,6 @@ export const closePosition: Command = {
     }
 
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
-    const harvest = interaction.options.getBoolean("harvest");
-    if (harvest) {
-      const harvestResult = await harvestLockedPositionController(positionId);
-      await interaction.editReply({
-        content: `Harvested the pos position: ${harvestResult}`,
-      });
-      return;
-    }
 
     const result = await closePositionController(positionId);
 
