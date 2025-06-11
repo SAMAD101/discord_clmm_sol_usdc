@@ -27,7 +27,7 @@ export const openPosition: Command = {
     const result = await openPositionController(amount);
 
     await interaction.editReply({
-      content: `Position opened: ${result}`,
+      content: `Position opened: ${result.id}`,
     });
   },
 };

@@ -15,7 +15,7 @@ import BN from 'bn.js'
 import { initSdk } from './raydium_config'
 import { PositionWithPool } from './types'
 
-export const fetchPositionInfo = async (positionId: string): Promise<PositionWithPool> => {
+export const fetchPositionInfo = async (positionId: string) => {
     const raydium = await initSdk()
 
     const positionPubKey = getPdaPersonalPositionAddress(CLMM_PROGRAM_ID, new PublicKey(positionId)).publicKey
@@ -152,11 +152,5 @@ export const fetchPositionInfo = async (positionId: string): Promise<PositionWit
         })),
     })
 
-    return {
-        id: position.nftMint.toBase58(),
-        amount: Number(amountA.amount.toString()),
-        pool: `${poolInfo.mintA.symbol} - ${poolInfo.mintB.symbol}`,
-        pooledAmountA: Number(pooledAmountA.toString()),
-        pooledAmountB: Number(pooledAmountB.toString()),
-    };
+    return position
 }

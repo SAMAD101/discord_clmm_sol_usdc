@@ -28,7 +28,7 @@ export const closePosition: Command = {
     if (harvest) {
       const harvestResult = await harvestLockedPositionController(positionId);
       await interaction.editReply({
-        content: `Harvested the position position: ${harvestResult}`,
+        content: `Harvested the pos position: ${harvestResult}`,
       });
       return;
     }
@@ -36,7 +36,7 @@ export const closePosition: Command = {
     const result = await closePositionController(positionId);
 
     await interaction.editReply({
-      content: `Position closed: ${result}`,
+      content: `Position closed: ${result.id}`,
     });
   },
 };

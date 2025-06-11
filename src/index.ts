@@ -2,6 +2,7 @@ import "dotenv/config";
 import client from "./bot";
 import { Events, REST, Routes } from "discord.js";
 import { commands } from "./bot/commands";
+import { startPositionManager } from "./utils/position_manager";
 
 const token = process.env.DISCORD_TOKEN!;
 const clientId = process.env.BOT_CLIENT_ID!;
@@ -24,6 +25,8 @@ const rest = new REST().setToken(token);
     });
     console.log(data);
     console.log(`Successfully registered ${commands.size} commands`);
+
+    startPositionManager();
   } catch (error) {
     console.error(error);
   }

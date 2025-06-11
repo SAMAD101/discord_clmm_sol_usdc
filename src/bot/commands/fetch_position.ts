@@ -26,7 +26,7 @@ export const fetchPositionCommand = {
     });
     const result = await fetchPositionController(positionId);
     await interaction.reply({
-      content: `Position fetched: ${result}`,
+      content: `Position fetched:\n ${JSON.stringify(result, null, 2)}`,
       ephemeral: true,
     });
   },
