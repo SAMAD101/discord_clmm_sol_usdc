@@ -16,7 +16,11 @@ export const owner: Keypair = Keypair.fromSecretKey(
 
 export const ownerPublicKey = owner.publicKey.toBase58();
 
-export const connection = new Connection(rpcEndpoint);
+export const connection = new Connection(rpcEndpoint, {
+  commitment: "confirmed",
+  confirmTransactionInitialTimeout: 60000,
+  wsEndpoint: rpcEndpoint.replace("https", "wss"),
+});
 
 export const txVersion = TxVersion.V0;
 const cluster = "mainnet";
@@ -25,10 +29,6 @@ let raydium: Raydium | undefined;
 
 export const initSdk = async (params?: { loadToken?: boolean }) => {
   if (raydium) return raydium;
-  if (connection.rpcEndpoint === clusterApiUrl("mainnet-beta"))
-    console.warn(
-      "using free rpc node might cause unexpected error, strongly suggest uses paid rpc node",
-    );
   console.log(`connect to rpc ${connection.rpcEndpoint} in ${cluster}`);
   raydium = await Raydium.load({
     owner,
