@@ -22,12 +22,6 @@ export const fetchPositionInfo = async (positionId: string) => {
     const pos = await raydium.connection.getAccountInfo(positionPubKey)
     const position = PositionInfoLayout.decode(pos!.data)
 
-    // code below: get all clmm position in wallet
-    // devnet:  DEVNET_PROGRAM_ID.CLMM
-    // const allPosition = await raydium.clmm.getOwnerPositionInfo({ programId: CLMM_PROGRAM_ID }) // devnet:  DEVNET_PROGRAM_ID.CLMM
-    // if (!allPosition.length) throw new Error('use do not have position')
-    // const position = allPosition[0]
-
     let poolInfo: ApiV3PoolInfoConcentratedItem
 
     if (raydium.cluster === 'mainnet') {
