@@ -48,7 +48,7 @@ export const open_position = async (amount: string): Promise<Position> => {
   const epochInfo = await raydium.fetchEpochInfo();
   const res = await PoolUtils.getLiquidityAmountOutFromAmountIn({
     poolInfo,
-    slippage: 0.05,
+    slippage: 0.1,
     inputA: true,
     tickUpper: Math.max(lowerTick, upperTick),
     tickLower: Math.min(lowerTick, upperTick),
