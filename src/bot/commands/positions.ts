@@ -9,10 +9,8 @@ export const positions: Command = {
   async execute(interaction: ChatInputCommandInteraction) {
     const result = await listPositionsController();
     const formattedResult = result.map((position) => {
-      return `Position ID: ${position.id}, Amount: ${position.poolId}`;
+      return `Position ID: ${position.id}, Amount: ${position.amount}`;
     }).join("\n");
-    console.log(formattedResult);
-
     await interaction.reply({
       content: `Positions: ${formattedResult}`,
       flags: MessageFlags.Ephemeral,

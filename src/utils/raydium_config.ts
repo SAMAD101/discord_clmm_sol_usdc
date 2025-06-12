@@ -6,6 +6,8 @@ import {
 import { Connection, Keypair, clusterApiUrl } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
+const rpcEndpoint = process.env.RPC_ENDPOINT!;
+
 const secretKey = new Uint8Array(JSON.parse(process.env.WALLET_SECRET_KEY!));
 
 export const owner: Keypair = Keypair.fromSecretKey(
@@ -14,7 +16,7 @@ export const owner: Keypair = Keypair.fromSecretKey(
 
 export const ownerPublicKey = owner.publicKey.toBase58();
 
-export const connection = new Connection(clusterApiUrl("mainnet-beta"));
+export const connection = new Connection(rpcEndpoint);
 
 export const txVersion = TxVersion.V0;
 const cluster = "mainnet";
