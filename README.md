@@ -25,6 +25,9 @@ DATABASE_PASSWORK=
 DATABASE_NAME=
 DATABASE_URL=
 
+# solana
+RPC_ENDPOINT=
+
 # redis
 REDIS_HOST=
 REDIS_PORT=
@@ -36,7 +39,13 @@ DISCORD_CHANNEL_WEBHOOK=
 
 WALLET_SECRET_KEY=
 ```
-3. Run the bot
+3. Run the docker containers
+
+```bash
+docker compose up -d
+```
+
+4. Run the bot
 
 ```bash
 yarn run dev
